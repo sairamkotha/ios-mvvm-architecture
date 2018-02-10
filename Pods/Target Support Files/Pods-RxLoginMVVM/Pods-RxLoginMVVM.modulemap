@@ -1,0 +1,6 @@
+framework module Pods_RxLoginMVVM {
+  umbrella header "Pods-RxLoginMVVM-umbrella.h"
+
+  export *
+  module * { export * }
+}
