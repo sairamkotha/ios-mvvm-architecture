@@ -15,6 +15,15 @@ enum LoginStatusType: Equatable {
     case failed(message: String)
     case signup
 
+    var isFailed: Bool {
+        switch self {
+        case .failed:
+            return true
+        default:
+            return false
+        }
+    }
+
     static func == (lhs: LoginStatusType, rhs: LoginStatusType) -> Bool {
         switch (lhs, rhs) {
         case (.loggedin,.loggedin),

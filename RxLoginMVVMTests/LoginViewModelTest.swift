@@ -52,15 +52,20 @@ final class LoginViewModelTest: XCTestCase {
             .subscribe(loginStatus)
             .disposed(by: disposeBag)
 
+        viewModel.loginEnabled.asObservable()
+            .subscribe(loginEnabledTestObs)
+            .disposed(by: disposeBag)
+
         mobile.value = "76688"
         XCTAssertTrue(mobileValidation.events.last?.value.element == ValidationResult.failed)
 
         mobile.value = ""
         XCTAssertTrue(mobileValidation.events.last?.value.element == ValidationResult.empty)
+        XCTAssertTrue(loginEnabledTestObs.events.last?.value.element == false)
 
         mobile.value = "7679106369"
         XCTAssertTrue(mobileValidation.events.last?.value.element == ValidationResult.ok)
-
+        XCTAssertTrue(loginEnabledTestObs.events.last?.value.element == false)
 
         password.value = "21y"
         XCTAssertTrue(passwordValidation.events.last?.value.element == ValidationResult.failed)
@@ -70,5 +75,14 @@ final class LoginViewModelTest: XCTestCase {
 
         loginTap.onNext(())
         XCTAssertTrue(loginStatus.events.last?.value.element! == .signup)
+        XCTAssertTrue(loginEnabledTestObs.events.last?.value.element == true)
+
+        loginTap.onNext(())
+        XCTAssertTrue(loginStatus.events.last?.value.element! == .loggedin)
+        XCTAssertTrue(loginEnabledTestObs.events.last?.value.element == true)
+
+        loginTap.onNext(())
+        XCTAssertTrue(loginStatus.events.last?.value.element!.isFailed == true)
+        XCTAssertTrue(loginEnabledTestObs.events.last?.value.element == true)
     }
 }
